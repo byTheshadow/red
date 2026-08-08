@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>同人/OC 随机创作脑洞工坊</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 极简全局背景光晕 -->
+  <div class="ambient-glow glow-top"></div>
+  <div class="ambient-glow glow-bottom"></div>
+
+  <!-- SVG 图标定义（纯本地内联，无网络请求） -->
+  <svg style="display: none;">
+    <defs>
+      <!-- 重摇/刷新 图标 -->
+      <g id="icon-reroll">
+        <path d="M4 12a8 8 0 0 1 14.93-4M20 12a8 8 0 0 1-14.93 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <polyline points="19 4 19 8 15 8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="5 20 5 16 9 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <!-- 未锁定 图标 -->
+      <g id="icon-unlock">
+        <rect x="5" y="11" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M8 11V7a4 4 0 0 1 7.75-1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="12" cy="16" r="1.2" fill="currentColor"/>
+      </g>
+      <!-- 已锁定 图标 -->
+      <g id="icon-lock">
+        <rect x="5" y="11" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="12" cy="16" r="1.2" fill="currentColor"/>
+      </g>
+      <!-- 复制 图标 -->
+      <g id="icon-copy">
+        <rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+      <!-- 单/双人切换 图标 -->
+      <g id="icon-users">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <circle cx="9" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </g>
+    </defs>
+  </svg>
+
+  <div class="app-container">
+    <!-- 顶部杂志风标题 -->
+    <header class="app-header">
+      <div class="header-tag">CREATIVE BRAINSTORMING WORKSHOP</div>
+      <h1 class="header-title">创作脑洞工坊</h1>
+      <p class="header-subtitle">同人设定 · 世界观构建 · AI RP 提示词生成</p>
+    </header>
+
+    <!-- 顶部导航切换 -->
+    <nav class="nav-tabs" role="tablist">
+      <button class="nav-tab active" data-tab="tab-paro" type="button">Paro 摇骰</button>
+      <button class="nav-tab" data-tab="tab-world" type="button">世界观构建</button>
+      <button class="nav-tab" data-tab="tab-prompt" type="button">AI RP 提示词</button>
+    </nav>
+
+    <!-- 主体内容区域 -->
+    <main class="tab-content-container">
+
+      <!-- ================= 模式一：Paro / AU 摇骰机 ================= -->
+      <section id="tab-paro" class="tab-pane active">
+        <!-- 角色配置面板 -->
+        <div class="card settings-card">
+          <div class="card-header">
+            <span class="card-num">01</span>
+            <span class="card-label">角色与模式设定</span>
+            <button id="btn-toggle-mode" class="text-btn" type="button">
+              <svg class="icon-inline"><use href="#icon-users"></use></svg>
+              <span id="mode-text">双人模式</span>
+            </button>
+          </div>
+          <div class="input-group-row">
+            <div class="input-field">
+              <label for="char-a-name">角色 A</label>
+              <input type="text" id="char-a-name" value="角色 A" maxlength="12" placeholder="输入名称">
+            </div>
+            <div class="input-field" id="char-b-container">
+              <label for="char-b-name">角色 B</label>
+              <input type="text" id="char-b-name" value="角色 B" maxlength="12" placeholder="输入名称">
+            </div>
+          </div>
+        </div>
+
+        <!-- 抽取卡片展示 -->
+        <div class="card result-card">
+          <!-- 维度 1: 背景 Paro -->
+          <div class="dimension-item">
+            <div class="dimension-meta">
+              <span class="dimension-title">背景 Paro / AU</span>
+              <button class="lock-btn" data-lock="paro" title="锁定/解锁此项" type="button">
+                <svg class="icon-lock"><use href="#icon-unlock"></use></svg>
+              </button>
+            </div>
+            <div class="dimension-value" id="val-paro">哨兵向导机制</div>
+          </div>
+
+          <!-- 维度 2: 双方身份 / 角色身份 -->
+          <div class="dimension-item">
+            <div class="dimension-meta">
+              <span class="dimension-title" id="title-identity">角色身份分配</span>
+              <button class="lock-btn" data-lock="identity" title="锁定/解锁此项" type="button">
+                <svg class="icon-lock"><use href="#icon-unlock"></use></svg>
+              </button>
+            </div>
+            <div class="dimension-value" id="val-identity">
+              <p><strong id="label-role-a">角色 A：</strong><span id="val-identity-a">被放逐的首席审判官</span></p>
+              <p id="row-identity-b"><strong id="label-role-b">角色 B：</strong><span id="val-identity-b">隐匿身份的地下机械师</span></p>
+            </div>
+          </div>
+
+          <!-- 维度 3: 相遇契机 -->
+          <div class="dimension-item">
+            <div class="dimension-meta">
+              <span class="dimension-title">交集与相遇契机</span>
+              <button class="lock-btn" data-lock="chance" title="锁定/解锁此项" type="button">
+                <svg class="icon-lock"><use href="#icon-unlock"></use></svg>
+              </button>
+            </div>
+            <div class="dimension-value text-serif" id="val-chance">
+              因为一次空间传送阵的严重过载，两人被迫困在同一间狭窄的隔离舱内。
+            </div>
+          </div>
+
+          <!-- 维度 4: 核心张力/梗点 -->
+          <div class="dimension-item">
+            <div class="dimension-meta">
+              <span class="dimension-title">核心张力与冲突</span>
+              <button class="lock-btn" data-lock="tension" title="锁定/解锁此项" type="button">
+                <svg class="icon-lock"><use href="#icon-unlock"></use></svg>
+              </button>
+            </div>
+            <div class="dimension-value text-serif" id="val-tension">
+              表面上是势不两立的宿敌，暗地里却是彼此唯一不可替代的精神锚点。
+            </div>
+          </div>
+        </div>
+
+        <!-- 底部重摇操作栏 -->
+        <div class="action-bar">
+          <button id="btn-roll-paro" class="primary-btn" type="button">
+            <svg class="icon-btn"><use href="#icon-reroll"></use></svg>
+            <span>重掷未锁定项</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ================= 模式二：世界观构建器 ================= -->
+      <section id="tab-world" class="tab-pane">
+        <div class="card result-card">
+          <!-- 维度 1: 世界基调 -->
+          <div class="dimension-item">
+            <div class="dimension-meta">
+              <span class="dimension-title">世界基调与风格</span>
+              <button class="lock-btn" data-lock="tone" title="锁定/解锁此项" type="button">
+                <svg class="icon-lock"><use href="#icon-unlock"></use></svg>
+              </button>
+            </div>
+            <div class="dimension-value" id="val-tone">蒸汽废土与机械神教</div>
+          </div>
+
+          <!-- 维度 2: 核心生存法则 -->
+          <div class="dimension-item">
+            <div class="dimension-meta">
+              <span class="dimension-title">核心生存法则</span>
+              <button class="lock-btn" data-lock="rule" title="锁定/解锁此项" type="button">
+                <svg class="icon-lock"><use href="#icon-unlock"></use></svg>
+              </button>
+            </div>
+            <div class="dimension-value text-serif" id="val-rule">
+              每个人每天说话有严格的字数配额，超额者将暂时失去语言能力。
+            </div>
+          </div>
+
+          <!-- 维度 3: 底层代价/代价机制 -->
+          <div class="dimension-item">
+            <div class="dimension-meta">
+              <span class="dimension-title">底层代价与约束</span>
+              <button class="lock-btn" data-lock="cost" title="锁定/解锁此项" type="button">
+                <svg class="icon-lock"><use href="#icon-unlock"></use></svg>
+              </button>
+            </div>
+            <div class="dimension-value text-serif" id="val-cost">
+              使用超常力量的代价是逐渐遗忘生命中最珍贵的一段过往。
+            </div>
+          </div>
+
+          <!-- 维度 4: 世界危机/催化剂事件 -->
+          <div class="dimension-item">
+            <div class="dimension-meta">
+              <span class="dimension-title">突发危机与事件</span>
+              <button class="lock-btn" data-lock="crisis" title="锁定/解锁此项" type="button">
+                <svg class="icon-lock"><use href="#icon-unlock"></use></svg>
+              </button>
+            </div>
+            <div class="dimension-value text-serif" id="val-crisis">
+              维系整座浮空都市运转的核心能源核心突然出现了不可逆的裂痕。
+            </div>
+          </div>
+        </div>
+
+        <div class="action-bar">
+          <button id="btn-roll-world" class="primary-btn" type="button">
+            <svg class="icon-btn"><use href="#icon-reroll"></use></svg>
+            <span>重置未锁定世界观</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ================= 模式三：AI RP 提示词生成器 ================= -->
+      <section id="tab-prompt" class="tab-pane">
+        <div class="card prompt-card">
+          <div class="card-header">
+            <span class="card-num">RP PROMPT</span>
+            <span class="card-label">已根据前述设定自动组装</span>
+          </div>
+
+          <div class="prompt-preview-container">
+            <pre class="prompt-text" id="prompt-output"></pre>
+          </div>
+        </div>
+
+        <div class="action-bar">
+          <button id="btn-copy-prompt" class="primary-btn" type="button">
+            <svg class="icon-btn"><use href="#icon-copy"></use></svg>
+            <span>一键复制 Prompt</span>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- 底部极简版权声明 -->
+    <footer class="app-footer">
+      <span>MINIMALIST MAGAZINE EDITION · OFFLINE READY</span>
+    </footer>
+  </div>
+
+  <!-- 轻量 Toast 提示组件 -->
+  <div id="toast" class="toast">复制成功，可直接发送给 AI 开启对话</div>
+
+  <!-- 引入词库与主逻辑脚本 -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
