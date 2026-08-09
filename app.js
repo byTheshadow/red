@@ -221,7 +221,7 @@
     });
   }
 
-  // ========== 生成 AI RP Prompt ==========
+  // ========== 生成 AI  Prompt ==========
   function generatePrompt() {
     const nameA = state.charA || "{{user}}";
     const nameB = state.charB || "{{char}}";
