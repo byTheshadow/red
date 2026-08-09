@@ -1,0 +1,51 @@
+{
+  "name": "创作脑洞工坊",
+  "short_name": "脑洞工坊",
+  "version": "1.0.0",
+  "description": "面向同人创作者与网文写手的轻量级创作灵感生成工具，提供 Paro/AU 设定抽取、世界观构建、小剧场模板与 AI RP 提示词生成功能。",
+  "author": "shadow",
+  "category": "创意工具",
+  "entry": "index.html",
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "lang": "zh-CN",
+  "permissions": [],
+  "network": {
+    "allow_network_access": false
+  },
+  "content_security": {
+    "local_only": true,
+    "no_external_scripts": true,
+    "no_external_styles": true,
+    "no_external_fonts": true,
+    "no_tracking": true
+  },
+  "privacy": {
+    "collect_user_data": false,
+    "collect_location": false,
+    "collect_device_info": false,
+    "third_party_sdk": false
+  },
+  "pages": [
+    {
+      "path": "index.html",
+      "title": "创作脑洞工坊",
+      "description": "Paro摇骰、世界观构建、小剧场、AI RP提示词生成"
+    }
+  ],
+  "assets": [
+    "index.html",
+    "style.css",
+    "app.js",
+    "data.js",
+    "data-theater.js"
+  ],
+  "content_rating": {
+    "violence": "none",
+    "sexual_content": "none",
+    "language": "mild",
+    "suitable_for_minors": true
+  },
+  "review_notes": "本工具为纯本地运行的创意写作辅助工具，不含网络请求、用户数据采集、第三方SDK或外部资源加载。所有功能均通过本地HTML、CSS和JavaScript实现，词库内容用于生成文学创作灵感和提示词模板。"
+}
