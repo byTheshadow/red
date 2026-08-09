@@ -2,7 +2,7 @@
   "name": "创作脑洞工坊",
   "short_name": "脑洞工坊",
   "version": "1.0.0",
-  "description": "面向同人创作者与网文写手的轻量级创作灵感生成工具，提供 Paro/AU 设定抽取、世界观构建、小剧场模板与 AI RP 提示词生成功能。",
+  "description": "面向同人创作者与网文写手的轻量级创作灵感生成工具，提供 Paro/AU 设定抽取、世界观构建、小剧场模板与AI提示词生成功能。",
   "author": "shadow",
   "category": "创意工具",
   "entry": "index.html",
