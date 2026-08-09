@@ -53,6 +53,13 @@
         <circle cx="8" cy="16" r="1.2" fill="currentColor" stroke="none"/>
         <circle cx="16" cy="16" r="1.2" fill="currentColor" stroke="none"/>
       </symbol>
+      <symbol id="icon-theater" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16v12a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V4z"/>
+        <path d="M4 4c0 0 2 3 8 3s8-3 8-3"/>
+        <circle cx="9" cy="11" r="1.2" fill="currentColor" stroke="none"/>
+        <circle cx="15" cy="11" r="1.2" fill="currentColor" stroke="none"/>
+        <path d="M9 15c1.5 1.5 4.5 1.5 6 0"/>
+      </symbol>
     </defs>
   </svg>
 
@@ -61,19 +68,22 @@
     <header class="app-header">
       <div class="header-tag">CREATIVE BRAINSTORMING</div>
       <h1 class="header-title">创作脑洞工坊</h1>
-      <p class="header-subtitle">同人灵感 / 世界观构建 / AI RP 提示词</p>
+      <p class="header-subtitle">同人灵感 / 世界观构建 / 小剧场 / AI RP</p>
     </header>
 
     <!-- 导航 Tab -->
     <nav class="nav-tabs" role="tablist">
       <button class="nav-tab active" data-tab="tab-paro" type="button">
-        <span class="tab-label">Paro 摇骰</span>
+        <span class="tab-label">Paro</span>
       </button>
       <button class="nav-tab" data-tab="tab-world" type="button">
         <span class="tab-label">世界观</span>
       </button>
+      <button class="nav-tab" data-tab="tab-theater" type="button">
+        <span class="tab-label">小剧场</span>
+      </button>
       <button class="nav-tab" data-tab="tab-prompt" type="button">
-        <span class="tab-label">AI 提示词</span>
+        <span class="tab-label">AI RP</span>
       </button>
     </nav>
 
@@ -102,7 +112,6 @@
           </div>
         </div>
 
-        <!-- 摇骰结果展示卡片 -->
         <div class="card result-card" id="paro-results">
           <div class="dimension-item" data-dim="paro">
             <div class="dimension-meta">
@@ -148,7 +157,6 @@
           </div>
         </div>
 
-        <!-- 掷骰过渡动画 -->
         <div class="rolling-overlay" id="rolling-paro">
           <div class="rolling-dice">
             <svg class="dice-icon"><use href="#icon-dice"></use></svg>
@@ -208,7 +216,6 @@
           </div>
         </div>
 
-        <!-- 掷骰过渡动画 -->
         <div class="rolling-overlay" id="rolling-world">
           <div class="rolling-dice">
             <svg class="dice-icon"><use href="#icon-dice"></use></svg>
@@ -224,17 +231,66 @@
         </div>
       </section>
 
-      <!-- ====== 模式三：AI RP 提示词 ====== -->
+      <!-- ====== 模式三：小剧场 ====== -->
+      <section id="tab-theater" class="tab-pane">
+        <div class="card theater-card">
+          <div class="card-header">
+            <span class="card-tag">THEATER</span>
+            <span class="card-desc">抽取互动小剧场模板</span>
+          </div>
+
+          <!-- 当前抽中的小剧场展示 -->
+          <div class="theater-display">
+            <div class="theater-name" id="theater-name"></div>
+            <div class="theater-desc" id="theater-desc"></div>
+          </div>
+
+          <div class="prompt-container theater-prompt-container">
+                        <pre class="prompt-text" id="theater-prompt-output"></pre>
+          </div>
+
+          <p class="prompt-hint">
+            复制后可自行修改角色名、字数、互动规则与视觉风格
+          </p>
+        </div>
+
+        <div class="rolling-overlay theater-rolling-overlay" id="rolling-theater">
+          <div class="rolling-dice">
+            <svg class="dice-icon"><use href="#icon-theater"></use></svg>
+          </div>
+          <p class="rolling-text" id="rolling-text-theater">
+            正在寻找新的小剧场...
+          </p>
+        </div>
+
+        <div class="theater-actions">
+          <button id="btn-roll-theater" class="primary-btn" type="button">
+            <svg class="icon-btn"><use href="#icon-reroll"></use></svg>
+            <span>抽取新的小剧场</span>
+          </button>
+
+          <button id="btn-copy-theater" class="secondary-btn" type="button">
+            <svg class="icon-btn"><use href="#icon-copy"></use></svg>
+            <span>复制小剧场 Prompt</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ====== 模式四：AI RP 提示词 ====== -->
       <section id="tab-prompt" class="tab-pane">
         <div class="card prompt-card">
           <div class="card-header">
             <span class="card-tag">AI RP PROMPT</span>
             <span class="card-desc">基于当前设定自动生成</span>
           </div>
+
           <div class="prompt-container">
             <pre class="prompt-text" id="prompt-output"></pre>
           </div>
-          <p class="prompt-hint">复制后可自行修改字数、角色名等参数</p>
+
+          <p class="prompt-hint">
+            复制后可自行修改角色名、字数和互动要求
+          </p>
         </div>
 
         <div class="action-bar">
@@ -255,7 +311,14 @@
   <!-- Toast -->
   <div id="toast" class="toast" aria-live="polite"></div>
 
+  <!--
+    注意：
+    data-theater.js 必须放在 app.js 之前加载，
+    因为 app.js 需要读取 THEATER_DATABASE。
+  -->
   <script src="data.js"></script>
+  <script src="data-theater.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
+

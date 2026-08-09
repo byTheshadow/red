@@ -655,4 +655,138 @@ body {
     gap: 10px;
   }
 }
+/* ================================================
+   小剧场模块
+   ================================================ */
+
+.theater-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.theater-display {
+  min-height: 118px;
+  padding: 24px 18px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: var(--radius-md);
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(0, 0, 0, 0.055),
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      rgba(0, 0, 0, 0.035),
+      transparent 42%
+    ),
+    rgba(255, 255, 255, 0.72);
+  text-align: center;
+  transition: transform var(--transition-base),
+              box-shadow var(--transition-base);
+}
+
+.theater-display:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+.theater-name {
+  min-height: 32px;
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+  line-height: 1.45;
+}
+
+.theater-desc {
+  min-height: 24px;
+  margin-top: 8px;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.theater-prompt-container {
+  max-height: 390px;
+  margin-bottom: 0;
+}
+
+.theater-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.secondary-btn {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--text-primary);
+  padding: 14px 0;
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all var(--transition-base);
+}
+
+.secondary-btn:hover {
+  border-color: rgba(0, 0, 0, 0.28);
+  background: var(--white);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+
+.secondary-btn:active {
+  transform: scale(0.98);
+  background: #f4f4f4;
+}
+
+.theater-rolling-overlay {
+  position: absolute;
+  z-index: 20;
+}
+
+/* 小剧场切换时的内容淡入 */
+.theater-display.is-changing,
+.theater-prompt-container.is-changing {
+  animation: theaterContentChange 0.42s ease-out;
+}
+
+@keyframes theaterContentChange {
+  0% {
+    opacity: 0.2;
+    transform: translateY(6px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 手机窄屏适配 */
+@media (max-width: 380px) {
+  .theater-name {
+    font-size: 1.15rem;
+  }
+
+  .theater-display {
+    padding: 20px 14px;
+  }
+
+  .theater-prompt-container {
+    max-height: 330px;
+  }
+}
 

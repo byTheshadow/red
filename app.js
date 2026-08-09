@@ -11,6 +11,12 @@
     charA: "",
     charB: "",
 
+    theater: {
+      currentIndex: -1,
+      currentItem: null,
+      isRolling: false
+    },
+
     locks: {
       paro: false,
       identity: false,
@@ -73,7 +79,18 @@
     rollingParo: document.getElementById('rolling-paro'),
     rollingWorld: document.getElementById('rolling-world'),
     rollingTextParo: document.getElementById('rolling-text-paro'),
-    rollingTextWorld: document.getElementById('rolling-text-world')
+    rollingTextWorld: document.getElementById('rolling-text-world'),
+
+    // 小剧场元素
+    theaterName: document.getElementById('theater-name'),
+    theaterDesc: document.getElementById('theater-desc'),
+    theaterPromptOutput: document.getElementById('theater-prompt-output'),
+    btnRollTheater: document.getElementById('btn-roll-theater'),
+    btnCopyTheater: document.getElementById('btn-copy-theater'),
+    rollingTheater: document.getElementById('rolling-theater'),
+    rollingTextTheater: document.getElementById('rolling-text-theater'),
+    theaterDisplay: document.querySelector('.theater-display'),
+    theaterPromptContainer: document.querySelector('.theater-prompt-container')
   };
 
   // ========== 工具函数 ==========
@@ -178,7 +195,6 @@
       rollParo();
       renderParo();
       hideRolling(dom.rollingParo);
-      // 重触发维度动画
       reanimateDimensions('paro-results');
     }, 900);
   }
@@ -275,6 +291,115 @@ ${state.current.openingScenario || "四周的空气骤然凝滞，属于你的�
     return prompt;
   }
 
+  // ========== 小剧场功能 ==========
+  function getTheaterPool() {
+    if (typeof THEATER_DATABASE === 'undefined' || !Array.isArray(THEATER_DATABASE.theaterPool)) {
+      return [];
+    }
+    return THEATER_DATABASE.theaterPool;
+  }
+
+  function getRandomTheater(previousIndex) {
+    const pool = getTheaterPool();
+
+    if (pool.length === 0) {
+      return {
+        index: -1,
+        item: {
+          name: "暂无小剧场",
+          description: "请先在 data-theater.js 中添加小剧场模板。",
+          prompt: "暂无可用的小剧场 Prompt。"
+        }
+      };
+    }
+
+    if (pool.length === 1) {
+      return { index: 0, item: pool[0] };
+    }
+
+    let nextIndex = Math.floor(Math.random() * pool.length);
+    let attempts = 0;
+    while (nextIndex === previousIndex && attempts < 20) {
+      nextIndex = Math.floor(Math.random() * pool.length);
+      attempts++;
+    }
+
+    return { index: nextIndex, item: pool[nextIndex] };
+  }
+
+  function renderTheater() {
+    const theater = state.theater.currentItem;
+
+    if (!theater) {
+      dom.theaterName.textContent = "尚未抽取小剧场";
+      dom.theaterDesc.textContent = "点击下方按钮开始抽取";
+      dom.theaterPromptOutput.textContent = "";
+      return;
+    }
+
+    dom.theaterName.textContent = theater.name || "未命名小剧场";
+    dom.theaterDesc.textContent = theater.description || "暂无小剧场简介";
+    dom.theaterPromptOutput.textContent = theater.prompt || "暂无小剧场 Prompt。";
+  }
+
+  function animateTheaterContent() {
+    const targets = [dom.theaterDisplay, dom.theaterPromptContainer];
+    targets.forEach(element => {
+      if (!element) return;
+      element.classList.remove('is-changing');
+      void element.offsetWidth; // 强制 reflow
+      element.classList.add('is-changing');
+    });
+  }
+
+  function showTheaterRolling() {
+    if (!dom.rollingTheater) return;
+    const textPool = (typeof CREATIVE_DATABASE !== 'undefined' && Array.isArray(CREATIVE_DATABASE.rollingTextPool))
+      ? CREATIVE_DATABASE.rollingTextPool
+      : ["正在寻找新的小剧场..."];
+    dom.rollingTextTheater.textContent = random(textPool);
+    dom.rollingTheater.classList.add('active');
+  }
+
+  function hideTheaterRolling() {
+    if (!dom.rollingTheater) return;
+    dom.rollingTheater.classList.remove('active');
+  }
+
+  function rollTheater() {
+    const result = getRandomTheater(state.theater.currentIndex);
+    state.theater.currentIndex = result.index;
+    state.theater.currentItem = result.item;
+    renderTheater();
+    animateTheaterContent();
+  }
+
+  function animatedRollTheater() {
+    if (!dom.rollingTheater) {
+      rollTheater();
+      return;
+    }
+
+    if (state.theater.isRolling) return;
+    state.theater.isRolling = true;
+    showTheaterRolling();
+
+    setTimeout(() => {
+      rollTheater();
+      hideTheaterRolling();
+      state.theater.isRolling = false;
+    }, 850);
+  }
+
+  function copyTheaterPrompt() {
+    const theater = state.theater.currentItem;
+    if (!theater || !theater.prompt) {
+      showToast("当前没有可复制的小剧场 Prompt");
+      return;
+    }
+    copyText(theater.prompt);
+  }
+
   // ========== 锁定系统 ==========
   function toggleLock(key, btn) {
     state.locks[key] = !state.locks[key];
@@ -359,6 +484,13 @@ ${state.current.openingScenario || "四周的空气骤然凝滞，属于你的�
           rollOpening();
           generatePrompt();
         }
+
+        // 切到小剧场页，首次自动抽取
+        if (targetId === 'tab-theater') {
+          if (!state.theater.currentItem) {
+            rollTheater();
+          }
+        }
       });
     });
 
@@ -393,6 +525,16 @@ ${state.current.openingScenario || "四周的空气骤然凝滞，属于你的�
       const prompt = generatePrompt();
       copyText(prompt);
     });
+
+    // 小剧场抽取
+    if (dom.btnRollTheater) {
+      dom.btnRollTheater.addEventListener('click', animatedRollTheater);
+    }
+
+    // 小剧场 Prompt 复制
+    if (dom.btnCopyTheater) {
+      dom.btnCopyTheater.addEventListener('click', copyTheaterPrompt);
+    }
   }
 
   // ========== 初始化 ==========
@@ -400,9 +542,14 @@ ${state.current.openingScenario || "四周的空气骤然凝滞，属于你的�
     rollParo();
     rollWorld();
     rollOpening();
+
     renderParo();
     renderWorld();
     generatePrompt();
+
+    // 初始化小剧场
+    rollTheater();
+
     bindEvents();
   }
 
